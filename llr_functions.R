@@ -1,6 +1,5 @@
 # STAT-S 610
 # LAB 3
-# 2020-10-02
 # https://jfukuyama.github.io/teaching/stat610/assignments/lab3.pdf
 
 # --- functions --- #
@@ -92,3 +91,4 @@ fits <- llr(z = z, x = x, y = y, omega = pi / 3)
 # plot the data and the smoother
 plot(x, y)
 lines(z, fits, col = 'red')
+
