@@ -12,10 +12,31 @@ test_that("llr output has correct length", {
 
 
 test_that("make_weight_matrix works on simple cases", {
-    ## check that the output is a diagonal matrix, that all the elements are positive, that the weights are correct in simple cases where you know what the output shuold be
-
+  # make an example weight matrix
+  Wz = make_weight_matrix(z[1], x, omega)
+  
+  # check that the output is a diagonal matrix, 
+  expect_true(all(c(Wz[upper.tri(Wz)], Wz[lower.tri(Wz)]) == 0))
+  
+  # that all the elements are nonnegative, 
+  expect_true(all(Wz >= 0))
+  
+  # that the weights are correct in simple cases 
+  # where you know what the output should be
+  r = abs(x - z[1]) / omega
+  expect_equal(diag(Wz), sapply(r, W))
 })
 
 test_that("make_predictor_matrix works on simple cases", {
-    ## write tests to check that the dimensions are correct, the first column is all 1's, etc.
+  # make an example predictor matrix
+  X = make_predictor_matrix(x)
+  
+  # write tests to check that the dimensions are correct, 
+  expect_equal(dim(X), c(n, 2))
+  
+  # the first column is all 1's, 
+  expect_equal(X[, 1], rep(1, n))
+  
+  # second column is x
+  expect_equal(X[, 2], x)
 })
