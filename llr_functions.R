@@ -1,6 +1,4 @@
-# STAT-S 610
-# LAB 3
-# https://jfukuyama.github.io/teaching/stat610/assignments/lab3.pdf
+
 
 # --- functions --- #
 
@@ -20,20 +18,20 @@ llr <- function(x, y, z, omega) {
 #' @param omega (numeric) must be a scalar
 #' @return (numeric) scalar
 compute_f_hat <- function(z, x, y, omega) {
-  Wz <- make_weight_matrix(z, x, omega)
+  Wz <- make_weight_vector(z,x,omega)
   X <- make_predictor_matrix(x)
-  f_hat <- c(1, z) %*% solve(t(X) %*% Wz %*% X) %*% t(X) %*% Wz %*% y
+  f_hat = c(1, z) %*% solve(t(X) %*% (apply(x,z,"*",Wz)) * X) %*% t(X) %*% (apply(x,z,"*",Wz) * y)
   return(f_hat)
-}
 
+}
 #' @param z (numeric) must be a scalar
 #' @param x (numeric) vector of arbitrary length
 #' @param omega (numeric) must be a scalar
 #' @return (numeric) a diagonal matrix
-make_weight_matrix <- function(z, x, omega) {
+make_weight_vector <- function(z, x, omega) {
   r <- abs(x - z) / omega  # this is a vector of the same length as x
   w <- sapply(r, W)  # this is a vector of the same length as x and r
-  Wz <- diag(w)  # this is a diagonal matrix with elements from w
+  Wz = daig(w)
   return(Wz)
 }
 
@@ -84,11 +82,16 @@ y <- sin(x) + rnorm(length(x))
 
 # space along which to smooth
 z <- seq(-2 * pi, 2 * pi, length.out = 100)
-
+apply(x,z,"*",Wz)
+x
+z
+Wz
 # run smoothing
 fits <- llr(z = z, x = x, y = y, omega = pi / 3)
 
 # plot the data and the smoother
 plot(x, y)
 lines(z, fits, col = 'red')
-
+typeof(x)
+length(x)
+dim(x)
