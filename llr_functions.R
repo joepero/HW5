@@ -20,7 +20,7 @@ llr <- function(x, y, z, omega) {
 compute_f_hat <- function(z, x, y, omega) {
   Wz <- make_weight_vector(z,x,omega)
   X <- make_predictor_matrix(x)
-  f_hat = c(1, z) %*% solve(t(X) %*% (apply(x,z,"*",Wz)) * X) %*% t(X) %*% (apply(x,z,"*",Wz) * y)
+  f_hat = c(1, z) %*% solve(t(X) %*% apply(X,Wz,"*")) %*% t(X) %*% (Wz * y)
   return(f_hat)
 
 }
@@ -31,8 +31,6 @@ compute_f_hat <- function(z, x, y, omega) {
 make_weight_vector <- function(z, x, omega) {
   r <- abs(x - z) / omega  # this is a vector of the same length as x
   w <- sapply(r, W)  # this is a vector of the same length as x and r
-  Wz = daig(w)
-  return(Wz)
 }
 
 #' @param r (numeric) must be a scalar
@@ -82,10 +80,6 @@ y <- sin(x) + rnorm(length(x))
 
 # space along which to smooth
 z <- seq(-2 * pi, 2 * pi, length.out = 100)
-apply(x,z,"*",Wz)
-x
-z
-Wz
 # run smoothing
 fits <- llr(z = z, x = x, y = y, omega = pi / 3)
 
